@@ -1,0 +1,87 @@
+﻿@page
+@model GroupDirectoryModel
+@{
+    ViewData["Title"] = "Group Directory";
+    Layout = "_Layout2";
+}
+
+@{
+    if (!string.IsNullOrEmpty(@Model.Username))
+    {
+        <div class="sidenav">
+            <input style="background-color:#2d2d2c;font-size:1.0rem;text-align:left;color:#F8FBFF" type="text" class="form-control" id="searchGroupList" placeholder="Search" value="">
+            <div id="GroupList">
+                @{
+                    foreach (var item in Model.ADGroupsList)
+                    {
+                        <button type="button" id="@item" onclick="SearchADGroup(this.id)" style="width:200px" class="btn btn-primary">@item</button>
+                    }
+                }
+            </div>
+        </div>
+        <div style="margin-top:65px;" id="GroupsInfo">
+            @{ if (@Model.SearchQuery != null)
+                {
+                    <div class="row">
+                        <div class="col-lg-6" id="col" style="margin-left:230px;">
+                            <div class="List-GroupMembers">
+                                <div class="card border-info mb-3" style="max-width: 40rem;">
+                                    <div class="card-header text-primary" style="font-size: 18pt">@Model.SearchQuery</div>
+                                    <div class="card-body">
+                                        <table style="table-layout:fixed;" class="table table-sm">
+                                            <tbody>
+                                                @{
+
+                                                    int cc = 0;
+                                                    int jj = 2;
+                                                    foreach (var item in @Model.GroupMembers)
+                                                    {
+                                                        var type = Model.MemberTypes[cc];
+                                                        if (jj % 2 == 0)
+                                                        {
+                                                            <tr style="background-color: #d1f2f7;">
+                                                                <td class="text-primary" style="font-size: 12pt;"><button type="button" style="background:transparent; border:none;" id="@item" data-ObjectType="@type" onclick="GetGroupMemberInfo(this.getAttribute('data-ObjectType'), this.id)">@item</button></td>
+                                                            </tr>
+                                                        }
+                                                        else
+                                                        {
+                                                            <tr style="background-color: #b7ecf4;">
+                                                                <td class="text-primary" style="font-size: 12pt;"><button type="button" style="background:transparent; border:none;" id="@item" data-ObjectType="@type" onclick="GetGroupMemberInfo(this.getAttribute('data-ObjectType'), this.id)">@item</button></td>
+                                                            </tr>
+                                                        }
+                                                        cc++;
+                                                    }
+                                                }        
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>   
+                            </div>
+                        </div> 
+                    </div>
+                }
+                else
+                {
+                    <div id="GroupInfo" style="margin-top:60px" class="container">
+                        <div class="jumbotron">
+                            <h1>Welcome!</h1>
+                            <p class="lead">Use the search bar on the left to search the Group Directory.</p>
+                        </div>
+                    </div>
+                }
+            }
+        </div>
+
+    }
+    else
+    {
+        Response.Redirect("/Login");
+
+    }
+    @section scripts{
+        @await Html.PartialAsync("_ValidationScriptsPartial")
+
+    }
+
+}
+

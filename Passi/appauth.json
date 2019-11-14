@@ -1,0 +1,6 @@
+{
+"Username":"Administrator",
+"Password":"Letmein123!",
+  "Domain": "Nova.local",
+  "Scope" :  "OU=Nova,DC=Nova,DC=local"
+}
